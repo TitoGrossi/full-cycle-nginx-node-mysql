@@ -2,7 +2,7 @@ version: "3"
 
 services:
   db:
-    image: mysql
+    image: mysql:5.7
     command: --innodb-use-native-aio=0
     container_name: db
     restart: always
@@ -27,12 +27,13 @@ services:
     volumes:
       # tag Z usada porque com selinux o docker não pode acessar a pasta local
       # https://stackoverflow.com/questions/35218194/what-is-z-flag-in-docker-containers-volumes-from-option
-      - ./node/:/usr/src/app:Z
+      - ./node/:/usr/src/app
       # Volume because node_modules is created during build time and lost on runtime (doesn't exist on container)
       - /usr/src/app/node_modules
     tty: true
     depends_on:
       - db
+    command: sh -c "/wait && node index.js"
 
   nginx:
     build:
