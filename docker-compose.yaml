@@ -2,7 +2,7 @@ version: "3"
 
 services:
   db:
-    image: mysql
+    image: mysql:5.7
     command: --innodb-use-native-aio=0
     container_name: db
     restart: always
@@ -33,6 +33,7 @@ services:
     tty: true
     depends_on:
       - db
+    command: sh -c "/wait && node index.js"
 
   nginx:
     build:
