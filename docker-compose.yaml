@@ -33,6 +33,8 @@ services:
     tty: true
     depends_on:
       - db
+    environment:
+      - WAIT_HOSTS=db:3306
     command: sh -c "/wait && node index.js"
 
   nginx:
