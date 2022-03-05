@@ -28,7 +28,7 @@ services:
       # tag Z usada porque com selinux o docker não pode acessar a pasta local
       # https://stackoverflow.com/questions/35218194/what-is-z-flag-in-docker-containers-volumes-from-option
       - ./node/:/usr/src/app:Z
-      # Volume because node_modules is created during build time and lost on runtime 
+      # Volume because node_modules is created during build time and lost on runtime (doesn't exist on container)
       - /usr/src/app/node_modules
     tty: true
     depends_on:
