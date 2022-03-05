@@ -1,0 +1,50 @@
+version: "3"
+
+services:
+  db:
+    image: mysql
+    command: --innodb-use-native-aio=0
+    container_name: db
+    restart: always
+    tty: true
+    volumes:
+      # tag Z usada porque com selinux o docker não pode acessar a pasta local
+      # https://stackoverflow.com/questions/35218194/what-is-z-flag-in-docker-containers-volumes-from-option
+      - ./.mysql:/var/lib/mysql:Z
+    environment:
+      - MYSQL_DATABASE=nodedb
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ROOT_USER=root
+    networks:
+      - full-cycle-network
+
+  app:
+    build:
+      context: node
+    container_name: app
+    networks:
+      - full-cycle-network
+    volumes:
+      # tag Z usada porque com selinux o docker não pode acessar a pasta local
+      # https://stackoverflow.com/questions/35218194/what-is-z-flag-in-docker-containers-volumes-from-option
+      - ./node/:/usr/src/app:Z
+      # Volume because node_modules is created during build time and lost on runtime 
+      - /usr/src/app/node_modules
+    tty: true
+    depends_on:
+      - db
+
+  nginx:
+    build:
+      context: ./nginx
+    container_name: nginx
+    networks:
+      - full-cycle-network
+    ports:
+      - "8080:80"
+    depends_on:
+      - app
+
+networks:
+  full-cycle-network:
+    driver: bridge
