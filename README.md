@@ -6,7 +6,7 @@ Para ver a aplicação rodando basta digitar na pasta root deste diretório o se
 ```bash
 sudo docker-compose up -d
 ```
-Daí, acessando (http://localhost:8080)[http://localhost:8080], a aplicação deve estar visível.
+Daí, acessando [http://localhost:8080](http://localhost:8080), a aplicação deve estar visível.
 
 #### O que esperar
 Cada vez que o usuário acessar a página, um novo usuário será criado no banco de dados.
